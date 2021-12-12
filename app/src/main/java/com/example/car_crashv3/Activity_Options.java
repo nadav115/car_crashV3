@@ -3,6 +3,7 @@ package com.example.car_crashv3;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ public class Activity_Options extends AppCompatActivity {
 
     //bundle variables
     private boolean gameModeTilt=false;
+    private boolean gameModeFast=false;
     private int playerSkinIndex = 0;
     private int volume = 50;
 
@@ -31,7 +33,8 @@ public class Activity_Options extends AppCompatActivity {
     //views
     private Bundle bundle;
     private Switch tiltMode;
-    private MaterialButton buttonExit;
+    private Switch fastMode;
+    private Button buttonExit;
     private ImageView currentSkin;
     private ImageButton leftSkinButton;
     private ImageButton rightSkinButton;
@@ -52,25 +55,25 @@ public class Activity_Options extends AppCompatActivity {
             }
         });
 
-        musicVolume.setMax( (seekBarMax - seekBarMin) / seekBarStep);
-        musicVolume.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener()
-                {
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {}
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {}
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress,
-                                                  boolean fromUser)
-                    {
-                        volume = seekBarMin + (progress * seekBarStep);
-                        musicVolumeText.setText("Music Volume: " + volume);
-                    }
-                }
-        );
+//        musicVolume.setMax( (seekBarMax - seekBarMin) / seekBarStep);
+//        musicVolume.setOnSeekBarChangeListener(
+//                new SeekBar.OnSeekBarChangeListener()
+//                {
+//                    @Override
+//                    public void onStopTrackingTouch(SeekBar seekBar) {}
+//
+//                    @Override
+//                    public void onStartTrackingTouch(SeekBar seekBar) {}
+//
+//                    @Override
+//                    public void onProgressChanged(SeekBar seekBar, int progress,
+//                                                  boolean fromUser)
+//                    {
+//                        volume = seekBarMin + (progress * seekBarStep);
+//                        musicVolumeText.setText("Music Volume: " + volume);
+//                    }
+//                }
+//        );
 
         tiltMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -80,6 +83,18 @@ public class Activity_Options extends AppCompatActivity {
                 }
                 else{
                     gameModeTilt=false;
+                }
+            }
+        });
+
+        fastMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    gameModeFast=true;
+                }
+                else{
+                    gameModeFast=false;
                 }
             }
         });
@@ -118,6 +133,7 @@ public class Activity_Options extends AppCompatActivity {
     private void setBundle() {
         bundle.putInt(Game.PLAYER_SKIN,playerSkinIndex);
         bundle.putBoolean(Game.MODE,gameModeTilt);
+        bundle.putBoolean(Game.SPEED,gameModeFast);
         bundle.putInt(Game.VOLUME, volume);
     }
 
@@ -131,8 +147,9 @@ public class Activity_Options extends AppCompatActivity {
     private void findViews() {
      //   leftSkinButton = findViewById(R.id.options_BTN_leftButton);
      //   rightSkinButton = findViewById(R.id.options_BTN_rightButton);
-//        buttonExit = findViewById(R.id.options_BTN_Exit);
+        buttonExit = findViewById(R.id.options_BTN_Exit);
         tiltMode = findViewById(R.id.options_SWITCH_TiltMode);
+        fastMode = findViewById(R.id.options_SWITCH_FastMode);
        // musicVolume = findViewById(R.id.options_SEEKBAR_background_volume);
         //musicVolumeText = findViewById(R.id.options_TEXTVIEW_text_volume);
     }

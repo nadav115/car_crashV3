@@ -46,17 +46,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:src="@drawable/img_heart"/>
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/points"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="2.6"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:autoSizeTextType="uniform"
-                android:text="Points: 0000"/>
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/odometer"
                 android:layout_width="0dp"
@@ -319,31 +309,31 @@
 
 
             <ImageView
-                android:id="@+id/panel_IMG_tile81"
+                android:id="@+id/panel_IMG_tile71"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"></ImageView>
 
             <ImageView
-                android:id="@+id/panel_IMG_tile82"
+                android:id="@+id/panel_IMG_tile72"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"></ImageView>
 
             <ImageView
-                android:id="@+id/panel_IMG_tile83"
+                android:id="@+id/panel_IMG_tile73"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"></ImageView>
 
             <ImageView
-                android:id="@+id/panel_IMG_tile84"
+                android:id="@+id/panel_IMG_tile74"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"></ImageView>
 
             <ImageView
-                android:id="@+id/panel_IMG_tile85"
+                android:id="@+id/panel_IMG_tile75"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"></ImageView>

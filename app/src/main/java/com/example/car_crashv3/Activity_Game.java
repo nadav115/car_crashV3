@@ -30,6 +30,10 @@ public class Activity_Game extends AppCompatActivity {
 
         initBundle();
         g.modifyGameByBundle(b);
+        if(g.getSpeedMode()){
+           g.setDelay(200);
+        }
+
         if(g.getTiltMode()){
             initSensor();
         }
@@ -118,7 +122,7 @@ public class Activity_Game extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        g.onResume();
+        //g.onResume();
         g.startTicker();
         if(g.getTiltMode())
             sensorManager.registerListener(accSensorEventListener, accSensor, SensorManager.SENSOR_DELAY_UI);
@@ -127,7 +131,7 @@ public class Activity_Game extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        g.onPause();
+        //g.onPause();
         g.stopTicker();
         if(g.getTiltMode())
             sensorManager.unregisterListener(accSensorEventListener);
@@ -135,7 +139,7 @@ public class Activity_Game extends AppCompatActivity {
 
     private void findViews(){
         g.setTimer(findViewById(R.id.odometer));
-        g.setPoints(findViewById(R.id.points));
+//        g.setPoints(findViewById(R.id.points));
         g.setButtonLeft(findViewById(R.id.buttonLeft));
         g.setButtonRight(findViewById(R.id.buttonRight));
         g.setButtonMenu(findViewById(R.id.game_BTN_menu));
@@ -182,11 +186,11 @@ public class Activity_Game extends AppCompatActivity {
                 new Tile( findViewById(R.id.panel_IMG_tile64), Tile.EMPTY),
                 new Tile( findViewById(R.id.panel_IMG_tile65), Tile.EMPTY)
         },  {
-                new Tile( findViewById(R.id.panel_IMG_tile81), Tile.EMPTY),
-                new Tile( findViewById(R.id.panel_IMG_tile82), Tile.EMPTY),
-                new Tile( findViewById(R.id.panel_IMG_tile83), Tile.EMPTY),
-                new Tile( findViewById(R.id.panel_IMG_tile84), Tile.EMPTY),
-                new Tile( findViewById(R.id.panel_IMG_tile85), Tile.EMPTY)
+                new Tile( findViewById(R.id.panel_IMG_tile71), Tile.EMPTY),
+                new Tile( findViewById(R.id.panel_IMG_tile72), Tile.EMPTY),
+                new Tile( findViewById(R.id.panel_IMG_tile73), Tile.EMPTY),
+                new Tile( findViewById(R.id.panel_IMG_tile74), Tile.EMPTY),
+                new Tile( findViewById(R.id.panel_IMG_tile75), Tile.EMPTY)
 
         }});
 

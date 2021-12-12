@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -22,14 +24,12 @@ public class Game {
 
 
 
-    private MediaPlayer soundBackgroundMusic;
-    private MediaPlayer inGameSoundCrash;
-    private MediaPlayer inGameSoundCollect;
-    private MediaPlayer inGameSoundSphere;
+    private MediaPlayer crashSound;
     private ImageButton buttonLeft, buttonRight;
     private MaterialButton buttonMenu;
     private MaterialTextView timer;
-    private MaterialTextView points;
+   // private MaterialTextView points;
+    //private MaterialTextView odometer;
     private ImageView lives[];
     private com.example.car_crashv3.Tile[][] tiles;
 
@@ -37,23 +37,23 @@ public class Game {
     public final float SENSITIVITY = 2;
     private final int MAX_LIVES = 3;
     private final int NUMBER_OF_LANES = 5;
-    private final int NUMBER_OF_LAYERS = 8; // player layer = NUMBER_OF_LAYERS -1
-    private final static int MAX_VOLUME = 100;
+    private final int NUMBER_OF_LAYERS = 7; // player layer = NUMBER_OF_LAYERS -1
     private final int MAX_DELAY = 700;
     private final int MIN_DELAY = 200;
-    private final int MIN_EASTER_EGG_TIMER = 50;
-    private final int MAX_EASTER_EGG_TIMER = 100;
+
 
 
     //for bundles
     public static final String MODE = "MODE";
     public static final String PLAYER_SKIN = "PLAYER_SKIN";
     public static final String VOLUME = "VOLUME";
+    public static final String SPEED = "SPEED";
 
 
 
 
     private boolean tiltMode = false;
+    private boolean speedMode = false;
     private boolean tiltModeInitialized = false;
     private float initializedX;
     private float initializedY;
@@ -86,7 +86,8 @@ public class Game {
             newStone =!newStone;
 
             timer.setText("Odometer: " + toStingWithPad(odometer,3));
-            points.setText("Points: " + toStingWithPad(numOfPoints,3));
+            //points.setText("Points: " + toStingWithPad(numOfPoints,3));
+            odometer++;
 
             handler.postDelayed(r, delay);
         }
@@ -132,14 +133,18 @@ public class Game {
     public boolean getTiltMode() {
         return tiltMode;
     }
+    public boolean getSpeedMode() {
+        return speedMode;
+    }
 
     public void setLastViewedX(float lastViewedX) {
         this.lastViewedX = lastViewedX;
     }
     public void setDelay(int delay) {
+
         if(delay>MAX_DELAY)
             this.delay = MAX_DELAY;
-        else if (delay<MIN_DELAY)
+        else if (speedMode)
             this.delay = MIN_DELAY;
         else
             this.delay = delay;
@@ -156,12 +161,16 @@ public class Game {
     public void setTimer(MaterialTextView timer) {
         this.timer = timer;
     }
-    public void setPoints(MaterialTextView points) {
-        this.points = points;
-    }
+//    public void setPoints(MaterialTextView points) {
+//        this.points = points;F
+//    }
     public void setTiltMode(boolean tiltMode) {
         this.tiltMode = tiltMode;
     }
+    public void setSpeedMode(boolean speedMode) {
+        this.speedMode = speedMode;
+    }
+
     public void setButtonRight(ImageButton buttonRight) {
         this.buttonRight = buttonRight;
     }
@@ -232,6 +241,18 @@ public class Game {
 
     }
 
+    public void playCrashSound(View v){
+        if (crashSound == null){
+            crashSound = MediaPlayer.create(context,R.raw.sound_crash);
+        }
+        if (crashSound.isPlaying()){
+            crashSound.release();
+            crashSound = MediaPlayer.create(context,R.raw.sound_crash);
+        }
+
+        crashSound.start();
+    }
+
     public void movePlayer(boolean movingLeft) {
         int playerLocation = checkPlayerLocation();
         int moveTo;
@@ -269,7 +290,8 @@ public class Game {
                 else{
                     switch(tiles[i][j].getKind()){ // movement
                         case com.example.car_crashv3.Tile.STONE:
-
+                            tiles[i + 1][j].setStone();
+                            break;
 
                         case com.example.car_crashv3.Tile.COIN:
                             tiles[i + 1][j].setCoin();
@@ -301,14 +323,14 @@ public class Game {
         else if((hitter.getKind() == com.example.car_crashv3.Tile.COIN && hit.getKind() == com.example.car_crashv3.Tile.CAR) ||
                 (hitter.getKind() == com.example.car_crashv3.Tile.CAR && hit.getKind() == com.example.car_crashv3.Tile.COIN)){ // player was hit by crate.
            // inGameSoundCollect = createSoundEffect(inGameSoundCollect, R.raw.collect);
-            numOfPoints++;
+            odometer += 10;
 
         }
         return false;
 
     }
     private boolean loseLife(){ //returns true if player died
-
+        playCrashSound(null);
         vibrate(500);
         currentLives--;
         lives[currentLives].setVisibility(View.INVISIBLE);
@@ -328,6 +350,7 @@ public class Game {
     public void modifyGameByBundle(Bundle b) {
         if(b!=null) {
             setTiltMode(b.getBoolean(Game.MODE, false));
+            setSpeedMode(b.getBoolean(Game.SPEED,false));
            // com.example.car_crashv3.Tile.setCurrentPlayerSkin(b.getInt(Game.PLAYER_SKIN));
             //backgoundVolume = b.getInt(Game.VOLUME);
         }
@@ -337,35 +360,30 @@ public class Game {
 
     private void setDefaultBundle() {
         setTiltMode(false);
+        setSpeedMode(false);
        // com.example.car_crashv3.Tile.setCurrentPlayerSkin(com.example.car_crashv3.Tile.DEFAULT_PLAYER_SKIN);
     }
 
-//    private void createMusic() {
-//        if(soundBackgroundMusic==null) {
-//            soundBackgroundMusic = createSoundEffect(null,R.raw.background_music);
-//            soundBackgroundMusic.setLooping(true);
-//        }
-//    }
 
+//
 //    private MediaPlayer createSoundEffect(MediaPlayer mp, int soundEffect){
 //        if(mp!=null){
 //            mp.release();
 //        }
 //        mp = MediaPlayer.create(context, soundEffect);
-//        float volume = (float) (1 - (Math.log(MAX_VOLUME - backgoundVolume) / Math.log(MAX_VOLUME)));
 //        mp.setVolume(volume,volume);
 //        mp.start();
 //        return mp;
 //    }
 
     //TODO: move everything from activity game to here
-    public void onResume() {
-        if(soundBackgroundMusic!=null) {
-            soundBackgroundMusic.start();
-        }
-    }
-
-    public void onPause() {
-        soundBackgroundMusic.pause();
-    }
+//    public void onResume() {
+//        if(soundBackgroundMusic!=null) {
+//            soundBackgroundMusic.start();
+//        }
+//    }
+//
+//    public void onPause() {
+//        soundBackgroundMusic.pause();
+//    }
 }
